@@ -16,11 +16,11 @@ const schema = z.object({
   DATABASE_URL: z.string().min(1).optional(),
   DIRECT_URL: z.string().min(1).optional(),
 
-  // Supabase Auth (admin). Public values are safe to expose.
-  NEXT_PUBLIC_SUPABASE_URL: z.string().url().optional(),
-  NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(1).optional(),
-  // Comma-separated staff emails allowed into /admin.
-  ADMIN_ALLOWLIST: z.string().optional(),
+  // Self-contained admin auth (single admin, email + password).
+  ADMIN_EMAIL: z.string().email().optional(),
+  ADMIN_PASSWORD: z.string().min(1).optional(),
+  // Secret used to sign the admin session cookie. 32+ random chars recommended.
+  AUTH_SECRET: z.string().min(16).optional(),
 
   // Public site URL (used for metadata, OG, sitemap). Defaults to the domain.
   NEXT_PUBLIC_SITE_URL: z.string().url().optional(),
@@ -42,7 +42,7 @@ if (!parsed.success) {
 
 export const env = parsed.data;
 
-/** True when Supabase Auth is configured (admin can run). */
-export const supabaseConfigured = Boolean(
-  env.NEXT_PUBLIC_SUPABASE_URL && env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+/** True when admin auth is fully configured (admin can sign in). */
+export const adminAuthConfigured = Boolean(
+  env.ADMIN_EMAIL && env.ADMIN_PASSWORD && env.AUTH_SECRET,
 );

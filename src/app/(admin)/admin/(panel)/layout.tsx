@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { AdminNav } from "@/components/admin/AdminNav";
-import { requireAdmin } from "@/lib/supabase/server";
-import { supabaseConfigured } from "@/lib/env";
+import { requireAdmin } from "@/lib/admin/session";
+import { adminAuthConfigured } from "@/lib/env";
 
 export const metadata = { title: "Admin", robots: { index: false, follow: false } };
 
@@ -10,16 +10,16 @@ export default async function AdminPanelLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // Without Supabase, show a configuration notice instead of crashing.
-  if (!supabaseConfigured) {
+  // Without admin credentials configured, show a notice instead of crashing.
+  if (!adminAuthConfigured) {
     return (
       <main className="grid min-h-dvh place-items-center bg-parchment px-4">
         <div className="max-w-lg rounded-2xl border border-line bg-card p-8 text-center">
           <h1 className="font-display text-2xl font-semibold text-indigo">Admin not configured</h1>
           <p className="mt-3 text-muted">
-            Supabase Auth is not set up yet. Add <code>NEXT_PUBLIC_SUPABASE_URL</code>,{" "}
-            <code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code> and <code>ADMIN_ALLOWLIST</code> to your
-            environment, then reload.
+            Admin sign-in is not set up yet. Add <code>ADMIN_EMAIL</code>,{" "}
+            <code>ADMIN_PASSWORD</code> and <code>AUTH_SECRET</code> to your environment, then
+            reload.
           </p>
           <Link href="/" className="mt-6 inline-block text-sm font-semibold text-indigo underline">
             Return to website

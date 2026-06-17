@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
-import { requireAdmin } from "@/lib/supabase/server";
+import { requireAdmin } from "@/lib/admin/session";
 import { slugify } from "@/lib/slug";
 
 function revalidateGallery(slug?: string) {
