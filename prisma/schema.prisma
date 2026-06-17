@@ -1,0 +1,111 @@
+// Sri Gujarati Vidhyalaya — content backend schema
+// Editable by office staff via the Phase 2 admin. Public pages read these via Prisma.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  // Prisma 7: connection URLs live in prisma.config.ts (migrations) and the
+  // PrismaClient driver adapter (runtime). See src/lib/prisma.ts.
+}
+
+model News {
+  id          String    @id @default(cuid())
+  title       String
+  slug        String    @unique
+  excerpt     String?
+  body        String // rich text (HTML)
+  coverImage  String?
+  publishedAt DateTime?
+  isPublished Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([isPublished, publishedAt])
+}
+
+model Event {
+  id          String    @id @default(cuid())
+  title       String
+  slug        String    @unique
+  description String
+  startsAt    DateTime
+  endsAt      DateTime?
+  location    String?
+  coverImage  String?
+  isPublished Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([startsAt])
+}
+
+model GalleryAlbum {
+  id         String         @id @default(cuid())
+  title      String
+  slug       String         @unique
+  coverImage String?
+  createdAt  DateTime       @default(now())
+  images     GalleryImage[]
+}
+
+model GalleryImage {
+  id           String       @id @default(cuid())
+  album        GalleryAlbum @relation(fields: [albumId], references: [id], onDelete: Cascade)
+  albumId      String
+  cloudinaryId String
+  caption      String?
+  sortOrder    Int          @default(0)
+
+  @@index([albumId, sortOrder])
+}
+
+model Story {
+  id           String  @id @default(cuid())
+  title        String
+  caption      String?
+  youtubeUrl   String?
+  cloudinaryId String?
+  thumbnail    String?
+  sortOrder    Int     @default(0)
+  isPublished  Boolean @default(true)
+
+  @@index([sortOrder])
+}
+
+enum EnquiryStatus {
+  NEW
+  CONTACTED
+  CLOSED
+}
+
+model Enquiry {
+  id            String        @id @default(cuid())
+  parentName    String
+  childName     String?
+  gradeInterest String?
+  phone         String
+  email         String?
+  message       String?
+  status        EnquiryStatus @default(NEW)
+  createdAt     DateTime      @default(now())
+
+  @@index([status, createdAt])
+}
+
+// Single-row site settings. Enforced by a fixed primary key.
+model Settings {
+  id               String   @id @default("singleton")
+  phone            String
+  email            String
+  address          String
+  admissionsOpen   Boolean  @default(false)
+  heroVideoUrl     String?
+  prospectusPdfUrl String?
+  facebookUrl      String?
+  instagramUrl     String?
+  youtubeUrl       String?
+  updatedAt        DateTime @updatedAt
+}

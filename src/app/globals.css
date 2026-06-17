@@ -1,26 +1,109 @@
 @import "tailwindcss";
 
+/*
+  Sri Gujarati Vidhyalaya — design tokens (single source of truth).
+  Heritage Indian institution: regal, warm, literary. Light parchment design;
+  deliberately NOT dark-mode. Do not add a prefers-color-scheme dark invert.
+*/
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --ink: #0f1b36; /* midnight indigo — deepest surfaces */
+  --indigo: #1a2a4f; /* heritage indigo — brand dominant */
+  --gold: #c8a24b; /* brass/gold — primary accent (decorative / on dark) */
+  --gold-soft: #e3c987;
+  --gold-deep: #7a5a1c; /* AA-contrast gold for text on light surfaces */
+  --saffron: #e08a2b; /* marigold — used sparingly (decorative / on dark) */
+  --danger: #a8421a; /* AA-contrast error/required text on light surfaces */
+  --parchment: #f4ede0; /* warm page background */
+  --card: #fbf8f2;
+  --text: #20283a;
+  --muted: #5b6478;
+  --line: #e4dbcb;
 }
 
+/* Map tokens + fonts into Tailwind's theme so utilities like
+   bg-indigo, text-gold, font-display, border-line are generated. */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-ink: var(--ink);
+  --color-indigo: var(--indigo);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-gold-deep: var(--gold-deep);
+  --color-saffron: var(--saffron);
+  --color-danger: var(--danger);
+  --color-parchment: var(--parchment);
+  --color-card: var(--card);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+
+  --font-display: var(--font-fraunces);
+  --font-sans: var(--font-manrope);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Reference the next/font CSS variables (set on <html>) directly, so body and
+   heading typography is independent of Tailwind's @theme var emission. */
+body {
+  background-color: var(--parchment);
+  color: var(--text);
+  font-family: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-fraunces), ui-serif, Georgia, serif;
+}
+
+/* Scroll-reveal (see Reveal component). Restrained fade + 22px rise. */
+.reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity 600ms ease-out,
+    transform 600ms ease-out;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Minimal styling for admin-authored rich text (news/event bodies). */
+.prose-content h2,
+.prose-content h3 {
+  font-family: var(--font-fraunces), ui-serif, Georgia, serif;
+  color: var(--indigo);
+  font-weight: 600;
+  margin-top: 1.5em;
+}
+.prose-content h2 {
+  font-size: 1.5rem;
+}
+.prose-content h3 {
+  font-size: 1.25rem;
+}
+.prose-content a {
+  color: var(--indigo);
+  text-decoration: underline;
+  text-decoration-color: var(--gold);
+  text-underline-offset: 3px;
+}
+.prose-content ul,
+.prose-content ol {
+  padding-left: 1.5rem;
+  list-style: revert;
+}
+.prose-content li {
+  margin-top: 0.4em;
 }
