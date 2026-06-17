@@ -40,14 +40,38 @@
   --font-sans: var(--font-manrope);
 }
 
+html {
+  scroll-behavior: smooth;
+  /* anchor jumps + scroll-snap clear the fixed header */
+  scroll-padding-top: 5.5rem;
+}
+
+/* "One scroll ≈ one section": gentle proximity snap to each section's top.
+   Tall sections (academics, news, timeline) still scroll through normally —
+   proximity only engages when a section edge is near the snapport. Disabled
+   under reduced-motion (handled in the reduced-motion block below). */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-snap-type: y proximity;
+  }
+  main > section {
+    scroll-snap-align: start;
+  }
+}
+
 /* Reference the next/font CSS variables (set on <html>) directly, so body and
    heading typography is independent of Tailwind's @theme var emission. */
 body {
   background-color: var(--parchment);
   color: var(--text);
   font-family: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  line-height: 1.65;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "kern", "liga", "calt";
 }
 
+/* Editorial display type: Fraunces with optical sizing, confident tight leading,
+   a hair of negative tracking, and balanced line breaks for headline ragging. */
 h1,
 h2,
 h3,
@@ -55,15 +79,81 @@ h4,
 h5,
 h6 {
   font-family: var(--font-fraunces), ui-serif, Georgia, serif;
+  font-optical-sizing: auto;
+  letter-spacing: -0.015em;
+  line-height: 1.1;
+  text-wrap: balance;
 }
 
-/* Scroll-reveal (see Reveal component). Restrained fade + 22px rise. */
+h1 {
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+}
+
+/* Tasteful selection in heritage gold. */
+::selection {
+  background: var(--gold-soft);
+  color: var(--ink);
+}
+
+/* Short gold hairline used above eyebrows / section headings — the prestige cue. */
+.gold-rule {
+  display: block;
+  height: 2px;
+  width: 2.75rem;
+  background: linear-gradient(90deg, var(--gold), transparent);
+  border-radius: 2px;
+}
+.gold-rule[data-inverted="true"] {
+  background: linear-gradient(90deg, var(--gold-soft), transparent);
+}
+.gold-rule[data-align="center"] {
+  margin-inline: auto;
+  background: linear-gradient(90deg, transparent, var(--gold) 50%, transparent);
+}
+
+/* Editorial card: quiet at rest, lifts with a gold top-rule on hover/focus.
+   Transform-only motion (no layout shift); honours reduced-motion below. */
+.card-rise {
+  position: relative;
+  transition:
+    transform 280ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 280ms ease-out,
+    border-color 280ms ease-out;
+}
+.card-rise::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 2px;
+  border-radius: 2px 2px 0 0;
+  background: linear-gradient(90deg, var(--gold), var(--gold-soft));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.group:hover .card-rise,
+.card-rise:hover,
+.card-rise:focus-within {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 40px -24px rgba(15, 27, 54, 0.45);
+  border-color: color-mix(in srgb, var(--gold) 45%, var(--line));
+}
+.group:hover .card-rise::after,
+.card-rise:hover::after,
+.card-rise:focus-within::after {
+  transform: scaleX(1);
+}
+
+/* Scroll-reveal (see Reveal component). Restrained fade + rise, eased like a
+   slow editorial settle rather than a snap. */
 .reveal {
   opacity: 0;
-  transform: translateY(22px);
+  transform: translateY(26px);
   transition:
-    opacity 600ms ease-out,
-    transform 600ms ease-out;
+    opacity 760ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 760ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
 }
 
 .reveal.is-visible {
@@ -72,9 +162,16 @@ h6 {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
   .reveal {
     opacity: 1;
     transform: none;
+    transition: none;
+  }
+  .card-rise,
+  .card-rise::after {
     transition: none;
   }
 }

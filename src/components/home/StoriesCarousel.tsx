@@ -80,7 +80,7 @@ function StoryItem({ story }: { story: StoryCard }) {
   const thumb = story.thumbnail ?? (ytId ? youTubeThumb(ytId) : null);
 
   return (
-    <figure className="group overflow-hidden rounded-xl border border-line bg-card transition-shadow hover:shadow-lg">
+    <figure className="card-rise group overflow-hidden rounded-2xl border border-line bg-card">
       <div className="relative aspect-video bg-indigo/10">
         {playing && ytId ? (
           <iframe

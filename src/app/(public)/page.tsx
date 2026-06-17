@@ -4,6 +4,7 @@ import { StoriesCarousel } from "@/components/home/StoriesCarousel";
 import { Container, Section, SectionHeading } from "@/components/ui/layout";
 import { ButtonLink } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
+import { Jali } from "@/components/patterns/Jali";
 import { Reveal } from "@/components/motion/Reveal";
 import { FacilitiesGrid } from "@/components/sections/FacilitiesGrid";
 import { HeritageTimeline } from "@/components/sections/HeritageTimeline";
@@ -25,13 +26,16 @@ export default async function HomePage() {
   return (
     <>
       {/* Hero */}
-      <VideoHero videoUrl={settings.heroVideoUrl}>
+      <VideoHero videoUrl={settings.heroVideoUrl ?? "/media/hero-campus.mp4"}>
         <div className="max-w-2xl">
-          <p className="font-display text-base text-gold-soft">Established {SITE.established}</p>
-          <h1 className="mt-3 font-display text-4xl font-semibold leading-tight text-parchment sm:text-5xl lg:text-6xl">
+          <span aria-hidden className="gold-rule mb-6" data-inverted="true" />
+          <p className="text-[0.8125rem] font-semibold tracking-[0.22em] text-gold-soft uppercase">
+            Established {SITE.established}
+          </p>
+          <h1 className="mt-4 font-display text-[2.75rem] font-semibold leading-[1.04] text-parchment sm:text-6xl lg:text-[4.25rem]">
             A 153-year heritage of learning in the heart of Kozhikode
           </h1>
-          <p className="mt-5 max-w-xl text-lg text-parchment/85">
+          <p className="mt-6 max-w-xl text-lg leading-relaxed text-parchment/85">
             Sri Gujarati Vidhyalaya Higher Secondary School — English-medium, co-educational,
             in Mananchira. Known, challenged and cared for, generation after generation.
           </p>
@@ -58,11 +62,11 @@ export default async function HomePage() {
               <Reveal as="li" key={card.title} delay={i * 60}>
                 <Link
                   href={card.href}
-                  className="group relative flex h-full flex-col rounded-xl border border-line bg-card p-6 transition-shadow hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
+                  className="card-rise group relative flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-card p-7 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
                 >
-                  <h2 className="font-display text-lg font-semibold text-indigo">{card.title}</h2>
-                  <p className="mt-2 flex-1 text-sm text-muted">{card.description}</p>
-                  <span className="mt-4 flex items-center gap-1.5 text-sm font-semibold text-gold-deep">
+                  <h2 className="font-display text-xl font-semibold text-indigo">{card.title}</h2>
+                  <p className="mt-2.5 flex-1 text-sm leading-relaxed text-muted">{card.description}</p>
+                  <span className="mt-5 flex items-center gap-1.5 text-sm font-semibold text-gold-deep">
                     {card.cta}
                     <Icon name="arrow-right" className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </span>
@@ -108,8 +112,8 @@ export default async function HomePage() {
                   { k: "LKG–XII", v: "Foundation to Higher Secondary" },
                   { k: "3 streams", v: "Science · Commerce · Humanities" },
                 ].map((stat) => (
-                  <div key={stat.k} className="rounded-xl border border-line bg-parchment p-6">
-                    <dt className="font-display text-2xl font-semibold text-indigo">{stat.k}</dt>
+                  <div key={stat.k} className="card-rise overflow-hidden rounded-2xl border border-line bg-parchment p-6">
+                    <dt className="font-display text-[1.75rem] font-semibold text-indigo">{stat.k}</dt>
                     <dd className="mt-1 text-sm text-muted">{stat.v}</dd>
                   </div>
                 ))}
@@ -144,10 +148,10 @@ export default async function HomePage() {
           <ul className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {STAGES.map((stage, i) => (
               <Reveal as="li" key={stage.slug} delay={i * 60}>
-                <div className="h-full rounded-xl border border-line bg-parchment p-6">
-                  <p className="text-xs font-semibold tracking-wide text-gold-deep uppercase">{stage.grades}</p>
+                <div className="card-rise h-full overflow-hidden rounded-2xl border border-line bg-parchment p-7">
+                  <p className="text-xs font-semibold tracking-[0.18em] text-gold-deep uppercase">{stage.grades}</p>
                   <h3 className="mt-2 font-display text-xl font-semibold text-indigo">{stage.name}</h3>
-                  <p className="mt-2 text-sm text-muted">{stage.summary}</p>
+                  <p className="mt-2.5 text-sm leading-relaxed text-muted">{stage.summary}</p>
                 </div>
               </Reveal>
             ))}
@@ -267,6 +271,10 @@ export default async function HomePage() {
 
       {/* Admissions CTA */}
       <Section tone="indigo" className="relative overflow-hidden">
+        <div aria-hidden className="pointer-events-none absolute inset-0 bg-gradient-to-br from-ink via-indigo to-ink" />
+        <div aria-hidden className="pointer-events-none absolute inset-0 opacity-[0.12]">
+          <Jali color="var(--gold)" />
+        </div>
         <Container>
           <div className="relative grid items-center gap-8 lg:grid-cols-[1.5fr_1fr]">
             <Reveal>

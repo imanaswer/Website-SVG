@@ -34,7 +34,7 @@ export function Section({
     ink: "bg-ink text-parchment",
   };
   return (
-    <section id={id} className={`py-16 sm:py-20 lg:py-24 ${tones[tone]} ${className}`}>
+    <section id={id} className={`py-20 sm:py-24 lg:py-28 ${tones[tone]} ${className}`}>
       {children}
     </section>
   );
@@ -57,9 +57,15 @@ export function SectionHeading({
   const alignClass = align === "center" ? "text-center mx-auto" : "";
   return (
     <div className={`max-w-2xl ${alignClass}`}>
+      <span
+        aria-hidden
+        className="gold-rule mb-5"
+        data-inverted={inverted ? "true" : undefined}
+        data-align={align === "center" ? "center" : undefined}
+      />
       {eyebrow && (
         <p
-          className={`text-sm font-semibold tracking-widest uppercase ${
+          className={`text-[0.8125rem] font-semibold tracking-[0.2em] uppercase ${
             inverted ? "text-gold-soft" : "text-gold-deep"
           }`}
         >
@@ -67,14 +73,18 @@ export function SectionHeading({
         </p>
       )}
       <h2
-        className={`mt-3 font-display text-3xl font-semibold sm:text-4xl ${
+        className={`mt-3 font-display text-[1.95rem] font-semibold sm:text-4xl lg:text-[2.6rem] lg:leading-[1.08] ${
           inverted ? "text-parchment" : "text-indigo"
         }`}
       >
         {title}
       </h2>
       {intro && (
-        <p className={`mt-4 text-lg ${inverted ? "text-parchment/80" : "text-muted"}`}>
+        <p
+          className={`mt-5 text-lg leading-relaxed ${
+            inverted ? "text-parchment/80" : "text-muted"
+          }`}
+        >
           {intro}
         </p>
       )}

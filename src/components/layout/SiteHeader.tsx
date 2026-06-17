@@ -71,7 +71,7 @@ export function SiteHeader() {
   // Light (over-hero) vs solid (scrolled) treatment.
   const solid = scrolled || open;
   const headerClass = solid
-    ? "border-line bg-parchment/95 backdrop-blur"
+    ? "border-line bg-parchment/90 shadow-[0_1px_24px_-12px_rgba(15,27,54,0.5)] backdrop-blur-md"
     : "border-transparent bg-transparent";
   const wordmarkText = solid ? "text-indigo" : "text-parchment";
   // Full literal class strings (Tailwind only generates classes it sees verbatim).
@@ -84,12 +84,12 @@ export function SiteHeader() {
     <header
       className={`fixed inset-x-0 top-0 z-40 border-b transition-colors duration-300 ${headerClass}`}
     >
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
         {/* Wordmark */}
         <Link href="/" className="flex items-center gap-3" aria-label={`${SCHOOL_NAME} — home`}>
           <span
             aria-hidden
-            className="grid h-10 w-10 place-items-center rounded-full bg-indigo font-display text-lg font-semibold text-gold-soft"
+            className="grid h-10 w-10 place-items-center rounded-full bg-indigo font-display text-lg font-semibold text-gold-soft ring-1 ring-gold/40"
           >
             SGV
           </span>
@@ -117,7 +117,7 @@ export function SiteHeader() {
             <li>
               <Link
                 href="/admissions"
-                className="ml-2 rounded-full bg-gold px-4 py-2 text-sm font-semibold text-ink transition-colors hover:bg-gold-soft"
+                className="ml-2 rounded-full bg-gold px-5 py-2 text-sm font-semibold text-ink transition duration-200 ease-out hover:-translate-y-0.5 hover:bg-gold-soft hover:shadow-lg hover:shadow-gold/30 motion-reduce:transform-none"
               >
                 Enquire
               </Link>

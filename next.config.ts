@@ -1,6 +1,13 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Allow the dev server's /_next resources (incl. HMR/Fast Refresh) to be
+  // requested when the site is opened via the LAN IP instead of localhost —
+  // e.g. testing on a phone on the same network. Without this, Next 16 blocks
+  // the HMR connection cross-origin and a page loaded mid-restart can get stuck
+  // on a stale bundle. Update the IP if your LAN address changes.
+  allowedDevOrigins: ["192.168.18.175"],
+
   images: {
     // Allow future next/image usage with Cloudinary + YouTube thumbnails.
     remotePatterns: [

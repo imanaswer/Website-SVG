@@ -63,7 +63,7 @@ export function VideoHero({
   return (
     <section
       ref={sectionRef}
-      className="relative isolate flex min-h-[88svh] items-end overflow-hidden bg-ink"
+      className="relative isolate flex min-h-dvh items-end overflow-hidden bg-ink"
     >
       {/* Media layer */}
       <div className="absolute inset-0 -z-10">
@@ -88,9 +88,15 @@ export function VideoHero({
           </video>
         )}
         {/* Scrim: darken left→right and bottom for headline legibility. */}
-        <div className="absolute inset-0 bg-gradient-to-r from-ink/80 via-ink/40 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/20 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-ink/85 via-ink/45 to-ink/10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/25 to-transparent" />
       </div>
+
+      {/* Hairline of gold light along the bottom edge. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent"
+      />
 
       {/* Content */}
       <div className="relative mx-auto w-full max-w-7xl px-4 pb-16 pt-28 sm:px-6 lg:px-8 lg:pb-24">

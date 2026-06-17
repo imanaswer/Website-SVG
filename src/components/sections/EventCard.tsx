@@ -5,12 +5,12 @@ import { formatDateTime } from "@/lib/format";
 /** Event summary card. */
 export function EventCard({ item }: { item: Event }) {
   return (
-    <article className="flex h-full gap-4 rounded-xl border border-line bg-card p-5">
-      <div className="flex flex-col items-center justify-center rounded-lg bg-indigo px-4 py-3 text-center text-parchment">
-        <span className="font-display text-2xl font-semibold leading-none">
+    <article className="card-rise flex h-full gap-4 overflow-hidden rounded-2xl border border-line bg-card p-6">
+      <div className="flex flex-col items-center justify-center rounded-xl bg-gradient-to-b from-indigo to-ink px-4 py-3 text-center text-parchment ring-1 ring-gold/25">
+        <span className="font-display text-[1.75rem] font-semibold leading-none text-gold-soft">
           {new Date(item.startsAt).getDate()}
         </span>
-        <span className="mt-1 text-xs tracking-wide uppercase">
+        <span className="mt-1 text-xs tracking-[0.15em] uppercase">
           {new Date(item.startsAt).toLocaleString("en-IN", { month: "short" })}
         </span>
       </div>
