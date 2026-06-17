@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { NAV_LINKS, SCHOOL_NAME } from "@/lib/nav";
 
 /**
@@ -142,8 +143,10 @@ export function SiteHeader() {
         </button>
       </div>
 
-      {/* Mobile drawer */}
-      {open && (
+      {/* Mobile drawer — portaled to <body> so the header's backdrop-blur
+          (backdrop-filter makes the header a containing block for fixed
+          descendants) can't trap this fixed overlay to the header's height. */}
+      {open && createPortal(
         <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Menu" id="mobile-drawer">
           <button
             type="button"
@@ -196,7 +199,8 @@ export function SiteHeader() {
               Enquire about admissions
             </Link>
           </div>
-        </div>
+        </div>,
+        document.body,
       )}
     </header>
   );
