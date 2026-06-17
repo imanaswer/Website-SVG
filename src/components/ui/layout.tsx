@@ -21,11 +21,14 @@ export function Section({
   className = "",
   tone = "parchment",
   id,
+  noSnap = false,
 }: {
   children: ReactNode;
   className?: string;
   tone?: "parchment" | "card" | "indigo" | "ink";
   id?: string;
+  /** Opt out of scroll-snap — use on sections with scroll-linked parallax. */
+  noSnap?: boolean;
 }) {
   const tones: Record<string, string> = {
     parchment: "bg-parchment text-text",
@@ -34,7 +37,11 @@ export function Section({
     ink: "bg-ink text-parchment",
   };
   return (
-    <section id={id} className={`py-20 sm:py-24 lg:py-28 ${tones[tone]} ${className}`}>
+    <section
+      id={id}
+      data-no-snap={noSnap ? "" : undefined}
+      className={`py-20 sm:py-24 lg:py-28 ${tones[tone]} ${className}`}
+    >
       {children}
     </section>
   );

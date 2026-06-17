@@ -1,6 +1,7 @@
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SchoolJsonLd } from "@/components/seo/SchoolJsonLd";
+import { MotionProvider } from "@/components/motion/MotionProvider";
 
 /** Layout for all public-facing pages: header + content + footer. */
 export default function PublicLayout({
@@ -17,11 +18,13 @@ export default function PublicLayout({
       >
         Skip to content
       </a>
-      <SiteHeader />
-      <main id="main-content" className="flex-1">
-        {children}
-      </main>
-      <SiteFooter />
+      <MotionProvider>
+        <SiteHeader />
+        <main id="main-content" className="flex-1">
+          {children}
+        </main>
+        <SiteFooter />
+      </MotionProvider>
     </>
   );
 }

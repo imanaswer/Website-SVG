@@ -54,7 +54,9 @@ html {
   html {
     scroll-snap-type: y proximity;
   }
-  main > section {
+  /* Snap each section, except those that opt out (scroll-linked parallax
+     sections — hero, CTA — fight the snap and feel janky). */
+  main > section:not([data-no-snap]) {
     scroll-snap-align: start;
   }
 }
@@ -161,9 +163,32 @@ h1 {
   transform: none;
 }
 
+/* Heritage-timeline node: pops to full size when its entry reveals. Driven off
+   the parent `.reveal` state (no JS), so the only scripted motion on the
+   timeline is the single scroll-linked gold line. */
+.reveal .timeline-node {
+  transform: scale(0);
+  transition: transform 480ms cubic-bezier(0.34, 1.56, 0.64, 1) 120ms;
+}
+.reveal.is-visible .timeline-node {
+  transform: scale(1);
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+  .timeline-node {
+    transform: none !important;
+    transition: none;
+  }
+  /* Hero entrance is framer (transform-only). Force the final visible state
+     deterministically — `!important` beats framer's inline transform, so the
+     headline/lede/rule render fully regardless of framer's runtime or JS. */
+  .hero-rule,
+  .hero-line,
+  .hero-fade {
+    transform: none !important;
   }
   .reveal {
     opacity: 1;

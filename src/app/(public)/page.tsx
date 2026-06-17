@@ -1,11 +1,16 @@
 import Link from "next/link";
 import { VideoHero } from "@/components/home/VideoHero";
+import { HeroContent } from "@/components/home/HeroContent";
 import { StoriesCarousel } from "@/components/home/StoriesCarousel";
 import { Container, Section, SectionHeading } from "@/components/ui/layout";
 import { ButtonLink } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 import { Jali } from "@/components/patterns/Jali";
 import { Reveal } from "@/components/motion/Reveal";
+import { MotionReveal } from "@/components/motion/MotionReveal";
+import { MagneticButton } from "@/components/motion/MagneticButton";
+import { Parallax } from "@/components/motion/Parallax";
+import { CountUp } from "@/components/motion/CountUp";
 import { FacilitiesGrid } from "@/components/sections/FacilitiesGrid";
 import { HeritageTimeline } from "@/components/sections/HeritageTimeline";
 import { PrincipalMessage } from "@/components/sections/PrincipalMessage";
@@ -14,6 +19,14 @@ import { EventCard } from "@/components/sections/EventCard";
 import { getSettings, getPublishedNews, getUpcomingEvents, getStories } from "@/server/data";
 import { AUDIENCE_CARDS, SITE } from "@/content/site";
 import { STAGES } from "@/content/academics";
+
+/** Welcome-section stats. Numeric ones roll up with CountUp when scrolled in. */
+const HOME_STATS = [
+  { count: 1873, suffix: "", label: "Year established" },
+  { count: 153, suffix: " years", label: "Of continuous learning" },
+  { text: "LKG–XII", label: "Foundation to Higher Secondary" },
+  { count: 3, suffix: " streams", label: "Science · Commerce · Humanities" },
+] as const;
 
 export default async function HomePage() {
   const [settings, news, events, stories] = await Promise.all([
@@ -27,31 +40,29 @@ export default async function HomePage() {
     <>
       {/* Hero */}
       <VideoHero videoUrl={settings.heroVideoUrl ?? "/media/hero-campus.mp4"}>
-        <div className="max-w-2xl">
-          <span aria-hidden className="gold-rule mb-6" data-inverted="true" />
-          <p className="text-[0.8125rem] font-semibold tracking-[0.22em] text-gold-soft uppercase">
-            Established {SITE.established}
-          </p>
-          <h1 className="mt-4 font-display text-[2.75rem] font-semibold leading-[1.04] text-parchment sm:text-6xl lg:text-[4.25rem]">
-            A 153-year heritage of learning in the heart of Kozhikode
-          </h1>
-          <p className="mt-6 max-w-xl text-lg leading-relaxed text-parchment/85">
-            Sri Gujarati Vidhyalaya Higher Secondary School — English-medium, co-educational,
-            in Mananchira. Known, challenged and cared for, generation after generation.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <ButtonLink href="/admissions" variant="gold" size="lg">
-              Enquire about admissions
-            </ButtonLink>
-            <ButtonLink
-              href="/about"
-              size="lg"
-              className="border border-parchment/30 text-parchment hover:bg-parchment/10"
-            >
-              Our story
-            </ButtonLink>
-          </div>
-        </div>
+        <HeroContent
+          established={SITE.established}
+          lines={["A 153-year heritage", "of learning in the heart", "of Kozhikode"]}
+          lead="Sri Gujarati Vidhyalaya Higher Secondary School — English-medium, co-educational, in Mananchira. Known, challenged and cared for, generation after generation."
+          actions={
+            <>
+              <MagneticButton>
+                <ButtonLink href="/admissions" variant="gold" size="lg">
+                  Enquire about admissions
+                </ButtonLink>
+              </MagneticButton>
+              <MagneticButton>
+                <ButtonLink
+                  href="/about"
+                  size="lg"
+                  className="border border-parchment/30 text-parchment hover:bg-parchment/10"
+                >
+                  Our story
+                </ButtonLink>
+              </MagneticButton>
+            </>
+          }
+        />
       </VideoHero>
 
       {/* Audience quick-entry cards */}
@@ -59,7 +70,7 @@ export default async function HomePage() {
         <Container>
           <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {AUDIENCE_CARDS.map((card, i) => (
-              <Reveal as="li" key={card.title} delay={i * 60}>
+              <Reveal as="li" key={card.title} delay={i * 70}>
                 <Link
                   href={card.href}
                   className="card-rise group relative flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-card p-7 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
@@ -104,17 +115,21 @@ export default async function HomePage() {
                 </ButtonLink>
               </div>
             </Reveal>
-            <Reveal delay={120}>
+            <Reveal as="div" delay={120}>
               <dl className="grid grid-cols-2 gap-4">
-                {[
-                  { k: "1873", v: "Year established" },
-                  { k: "153 years", v: "Of continuous learning" },
-                  { k: "LKG–XII", v: "Foundation to Higher Secondary" },
-                  { k: "3 streams", v: "Science · Commerce · Humanities" },
-                ].map((stat) => (
-                  <div key={stat.k} className="card-rise overflow-hidden rounded-2xl border border-line bg-parchment p-6">
-                    <dt className="font-display text-[1.75rem] font-semibold text-indigo">{stat.k}</dt>
-                    <dd className="mt-1 text-sm text-muted">{stat.v}</dd>
+                {HOME_STATS.map((stat) => (
+                  <div
+                    key={stat.label}
+                    className="card-rise overflow-hidden rounded-2xl border border-line bg-parchment p-6"
+                  >
+                    <dt className="font-display text-[1.75rem] font-semibold text-indigo">
+                      {"text" in stat ? (
+                        stat.text
+                      ) : (
+                        <CountUp value={stat.count} suffix={stat.suffix} />
+                      )}
+                    </dt>
+                    <dd className="mt-1 text-sm text-muted">{stat.label}</dd>
                   </div>
                 ))}
               </dl>
@@ -147,7 +162,7 @@ export default async function HomePage() {
           </Reveal>
           <ul className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {STAGES.map((stage, i) => (
-              <Reveal as="li" key={stage.slug} delay={i * 60}>
+              <Reveal as="li" key={stage.slug} delay={i * 70}>
                 <div className="card-rise h-full overflow-hidden rounded-2xl border border-line bg-parchment p-7">
                   <p className="text-xs font-semibold tracking-[0.18em] text-gold-deep uppercase">{stage.grades}</p>
                   <h3 className="mt-2 font-display text-xl font-semibold text-indigo">{stage.name}</h3>
@@ -215,7 +230,7 @@ export default async function HomePage() {
               {news.length > 0 ? (
                 <ul className="mt-8 grid gap-5 sm:grid-cols-2">
                   {news.map((item, i) => (
-                    <Reveal as="li" key={item.id} delay={i * 60}>
+                    <Reveal as="li" key={item.id} delay={i * 70}>
                       <NewsCard item={item} />
                     </Reveal>
                   ))}
@@ -238,7 +253,7 @@ export default async function HomePage() {
               {events.length > 0 ? (
                 <ul className="mt-8 space-y-4">
                   {events.map((item, i) => (
-                    <Reveal as="li" key={item.id} delay={i * 60}>
+                    <Reveal as="li" key={item.id} delay={i * 70}>
                       <EventCard item={item} />
                     </Reveal>
                   ))}
@@ -270,14 +285,14 @@ export default async function HomePage() {
       </Section>
 
       {/* Admissions CTA */}
-      <Section tone="indigo" className="relative overflow-hidden">
+      <Section tone="indigo" noSnap className="relative overflow-hidden">
         <div aria-hidden className="pointer-events-none absolute inset-0 bg-gradient-to-br from-ink via-indigo to-ink" />
-        <div aria-hidden className="pointer-events-none absolute inset-0 opacity-[0.12]">
+        <Parallax aria-hidden className="pointer-events-none absolute -inset-y-[10%] inset-x-0 opacity-[0.12]" speed={44}>
           <Jali color="var(--gold)" />
-        </div>
+        </Parallax>
         <Container>
           <div className="relative grid items-center gap-8 lg:grid-cols-[1.5fr_1fr]">
-            <Reveal>
+            <MotionReveal>
               <SectionHeading
                 eyebrow="Admissions"
                 title="Join the Sri Gujarati Vidhyalaya family"
@@ -288,11 +303,13 @@ export default async function HomePage() {
                 }
                 inverted
               />
-            </Reveal>
-            <Reveal delay={120} className="flex flex-wrap gap-3 lg:justify-end">
-              <ButtonLink href="/admissions" variant="gold" size="lg">
-                Start an enquiry
-              </ButtonLink>
+            </MotionReveal>
+            <MotionReveal delay={0.12} className="flex flex-wrap gap-3 lg:justify-end">
+              <MagneticButton>
+                <ButtonLink href="/admissions" variant="gold" size="lg">
+                  Start an enquiry
+                </ButtonLink>
+              </MagneticButton>
               <a
                 href={`tel:${SITE.phoneHref}`}
                 className="inline-flex items-center gap-2 rounded-full border border-parchment/30 px-6 py-3 font-semibold text-parchment hover:bg-parchment/10"
@@ -300,7 +317,7 @@ export default async function HomePage() {
                 <Icon name="phone" className="h-5 w-5" />
                 {settings.phone}
               </a>
-            </Reveal>
+            </MotionReveal>
           </div>
         </Container>
       </Section>
