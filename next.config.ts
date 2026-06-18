@@ -13,6 +13,10 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       { protocol: "https", hostname: "res.cloudinary.com" },
       { protocol: "https", hostname: "i.ytimg.com" },
+      // Placeholder demo imagery (src/content/media.ts) — remove once real
+      // school photography replaces the Pexels/Unsplash placeholders.
+      { protocol: "https", hostname: "images.unsplash.com" },
+      { protocol: "https", hostname: "images.pexels.com" },
     ],
   },
 

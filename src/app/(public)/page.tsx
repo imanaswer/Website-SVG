@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { VideoHero } from "@/components/home/VideoHero";
 import { HeroContent } from "@/components/home/HeroContent";
 import { StoriesCarousel } from "@/components/home/StoriesCarousel";
@@ -16,9 +17,12 @@ import { HeritageTimeline } from "@/components/sections/HeritageTimeline";
 import { PrincipalMessage } from "@/components/sections/PrincipalMessage";
 import { NewsCard } from "@/components/sections/NewsCard";
 import { EventCard } from "@/components/sections/EventCard";
+import { PhotoBand } from "@/components/sections/PhotoBand";
+import { Testimonials } from "@/components/sections/Testimonials";
 import { getSettings, getPublishedNews, getUpcomingEvents, getStories } from "@/server/data";
 import { AUDIENCE_CARDS, SITE } from "@/content/site";
 import { STAGES } from "@/content/academics";
+import { CAMPUS_WELCOME, STAGE_IMAGES } from "@/content/media";
 
 /** Welcome-section stats. Numeric ones roll up with CountUp when scrolled in. */
 const HOME_STATS = [
@@ -116,6 +120,15 @@ export default async function HomePage() {
               </div>
             </Reveal>
             <Reveal as="div" delay={120}>
+              <div className="relative mb-5 aspect-[16/10] overflow-hidden rounded-2xl ring-1 ring-gold/25">
+                <Image
+                  src={CAMPUS_WELCOME.src}
+                  alt={CAMPUS_WELCOME.alt}
+                  fill
+                  sizes="(min-width: 1024px) 40vw, 100vw"
+                  className="object-cover"
+                />
+              </div>
               <dl className="grid grid-cols-2 gap-4">
                 {HOME_STATS.map((stat) => (
                   <div
@@ -161,15 +174,31 @@ export default async function HomePage() {
             />
           </Reveal>
           <ul className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {STAGES.map((stage, i) => (
-              <Reveal as="li" key={stage.slug} delay={i * 70}>
-                <div className="card-rise h-full overflow-hidden rounded-2xl border border-line bg-parchment p-7">
-                  <p className="text-xs font-semibold tracking-[0.18em] text-gold-deep uppercase">{stage.grades}</p>
-                  <h3 className="mt-2 font-display text-xl font-semibold text-indigo">{stage.name}</h3>
-                  <p className="mt-2.5 text-sm leading-relaxed text-muted">{stage.summary}</p>
-                </div>
-              </Reveal>
-            ))}
+            {STAGES.map((stage, i) => {
+              const img = STAGE_IMAGES[stage.slug];
+              return (
+                <Reveal as="li" key={stage.slug} delay={i * 70}>
+                  <div className="card-rise group h-full overflow-hidden rounded-2xl border border-line bg-parchment">
+                    <div className="relative aspect-[16/10] overflow-hidden bg-card">
+                      {img && (
+                        <Image
+                          src={img.src}
+                          alt={img.alt}
+                          fill
+                          sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                          className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                      )}
+                    </div>
+                    <div className="p-7">
+                      <p className="text-xs font-semibold tracking-[0.18em] text-gold-deep uppercase">{stage.grades}</p>
+                      <h3 className="mt-2 font-display text-xl font-semibold text-indigo">{stage.name}</h3>
+                      <p className="mt-2.5 text-sm leading-relaxed text-muted">{stage.summary}</p>
+                    </div>
+                  </div>
+                </Reveal>
+              );
+            })}
           </ul>
           <div className="mt-8">
             <ButtonLink href="/academics" variant="secondary">
@@ -178,6 +207,12 @@ export default async function HomePage() {
           </div>
         </Container>
       </Section>
+
+      {/* Full-bleed photo band */}
+      <PhotoBand
+        eyebrow="In the heart of Kozhikode"
+        title="A campus where curiosity, character and community grow together."
+      />
 
       {/* Facilities preview */}
       <Section tone="parchment">
@@ -189,7 +224,7 @@ export default async function HomePage() {
             />
           </Reveal>
           <div className="mt-10">
-            <FacilitiesGrid limit={4} />
+            <FacilitiesGrid limit={4} withImages />
           </div>
           <div className="mt-8">
             <ButtonLink href="/facilities" variant="secondary">
@@ -280,6 +315,21 @@ export default async function HomePage() {
           </Reveal>
           <div className="mt-10 max-w-3xl">
             <HeritageTimeline />
+          </div>
+        </Container>
+      </Section>
+
+      {/* Testimonials */}
+      <Section tone="parchment">
+        <Container>
+          <Reveal>
+            <SectionHeading
+              eyebrow="In their words"
+              title="What our community says"
+            />
+          </Reveal>
+          <div className="mt-10">
+            <Testimonials />
           </div>
         </Container>
       </Section>

@@ -19,7 +19,8 @@ export type IconName =
   | "mail"
   | "chevron-left"
   | "chevron-right"
-  | "play";
+  | "play"
+  | "quote";
 
 const paths: Record<IconName, React.ReactNode> = {
   flask: (
@@ -93,6 +94,9 @@ const paths: Record<IconName, React.ReactNode> = {
   "chevron-left": <path d="M15 6l-6 6 6 6" />,
   "chevron-right": <path d="M9 6l6 6-6 6" />,
   play: <path d="M8 5v14l11-7z" />,
+  quote: (
+    <path d="M7 7H4a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h2v2a2 2 0 0 1-2 2M17 7h-3a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h2v2a2 2 0 0 1-2 2" />
+  ),
 };
 
 export function Icon({
